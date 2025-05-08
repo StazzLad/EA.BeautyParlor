@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utils\FileUploader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Utils\FileUploader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\EA.DAL.csproj" />
+    <ProjectReference Include="..\Entities\EA.Entity.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Management/Views/Shared/_Layout.cshtml";
+}
+
+<div class="toolbar hidden-print mb-2">
+    <div class="text-end">
+        <a class="btn btn-primary" asp-area="Management" asp-controller="HomePage" asp-action="Create">Add New Picture</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Home Page Pictures</h4>
+        </div>
+        <hr />
+        <div class="table-responsive">
+            <table id="example1" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>                        
+                        <th>Resim</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>                           
+
+                            <td>
+                                <img src="@item.ImageUrl" width="50" />
+                            </td>
+
+                            <td>
+                                <a class="btn btn-warning" asp-area="Management" asp-controller="HomePage" asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
+
+                                <a class="btn btn-danger btn-delete" id="@item.Id">Sil</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Resim</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        //delete
+        $(document).ready(function () {
+            $(document).on('click', '.btn-delete', async function () {
+                var elem = this;
+                var action = await ConfirmModal("Silmek istediğinizden emin misiniz?");
+                if (action) {
+                    $.ajax({
+                        url: '/Management/Category/Delete',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { "id": elem.id },
+                        success: function (e) {
+                            $(elem).closest('tr').remove();
+                            success_notification(e.message);
+                        },
+                        error: function (e) {
+                            error_notification("Bir hata oluştu");
+                        }
+                    });
+                }
+                else {
+                    info_notification("İptal edildi.");
+                }
+            });
+        });
+    </script>
+}
