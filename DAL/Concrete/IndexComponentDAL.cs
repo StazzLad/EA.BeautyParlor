@@ -1,6 +1,7 @@
 ﻿using EA.DAL.Abstract;
 using EA.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,37 @@ namespace EA.DAL.Concrete
         {
             _context.IndexComponents.Update(indexComponent);
             return _context.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            OnBeforeSaving();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void OnBeforeSaving()
+        {
+            var modifiedEntires = ChangeTracker.Entries()
+                .Where(x => x.Entity is BaseEntity && x.State is EntityState.Added or EntityState.Modified or EntityState.Deleted);
+
+            foreach (var entire in modifiedEntires)
+            {
+                var entity = entire.Entity as BaseEntity;
+
+                switch (entire.State)
+                {
+                    case EntityState.Modified:
+                        entity.UpdatedAt = DateTime.Now;
+                        
+                        break;
+                    case EntityState.Added:
+                        entity.Status = 1;
+                        entity.CreatedAt = DateTime.Now;
+                        entity.UpdatedAt = DateTime.Now;
+                        entity.Id = Guid.NewGuid();
+                        break;
+                }
+            }
         }
     }
 }
