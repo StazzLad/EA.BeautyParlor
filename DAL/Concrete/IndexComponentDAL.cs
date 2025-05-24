@@ -35,6 +35,11 @@ namespace EA.DAL.Concrete
                 .Where(x => x.Status == 1)
                 .ToListAsync();
         }
+        public bool IsActive(Guid id)
+        {
+            return _context.IndexComponents
+                .Any(x => x.Id == id && x.Status == 1);
+        }
 
         public async Task<IndexComponent> GetByIdAsync(Guid id)
         {

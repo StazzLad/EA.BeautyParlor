@@ -13,6 +13,7 @@ namespace EA.DAL.Abstract
         int Add(IndexComponent indexComponent);
         int Update(IndexComponent indexComponent);
         int Delete(Guid id);
+        bool IsActive(Guid id);
         Task<List<IndexComponent>> GetActiveComponents();
         Task<IndexComponent> GetByIdAsync(Guid id);
     }

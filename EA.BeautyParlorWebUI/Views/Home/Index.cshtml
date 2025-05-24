@@ -1,5 +1,7 @@
 ﻿ @using EA.Entity.Entities
- @model EA.Entity.Entities.IndexComponent
+ @model IndexComponent
+ @using EA.BLL
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,22 +12,29 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section">
-        
-        
-            @foreach (var Item in Model.IndexComponents)
-            {
-                <img src="@(Item.ImageUrl)" alt="" data-aos="fade-in">
 
-                <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <h2>Kelly Adams</h2>
-                            <p>I'm a professional illustrator from San Francisco</p>
-                            <a href="about.html" class="btn-get-started">About Me</a>
-                        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Url.Content(Model.ImageUrl)" alt="Selected Image" />
+            <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2>Beauty Parlor</h2>
+                        <p>"Neque porro quisquam est qui dolorem ipsum, adipisci velit..."</p>
+                        <a  asp-controller="Home" asp-action="About" class="btn-get-started">About Us</a>
                     </div>
                 </div>
-            }
+            </div>
+        }
+        else
+        {
+            <p>No image selected.</p>
+        }
+
+
+                
+            
         
 
     </section><!-- /Hero Section -->

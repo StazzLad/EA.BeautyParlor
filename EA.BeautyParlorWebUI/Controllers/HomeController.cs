@@ -15,9 +15,12 @@ namespace EA.BeautyParlorWebUI.Controllers
         }
         public  async Task<IActionResult> Index()
         {
-            var model = new IndexComponent();
-             model.IndexComponents = await _context.GetActiveComponents();
-            return View();
+            var components = await _context.GetActiveComponents();
+            var activeImage = components.FirstOrDefault(img => img.IsActive); 
+
+            
+            return View(activeImage);
+            
         }
 
         public IActionResult About()

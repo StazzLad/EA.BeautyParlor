@@ -1,4 +1,7 @@
-﻿
+﻿@using EA.Entity.Entities
+@using EA.BLL
+
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Management/Views/Shared/_Layout.cshtml";
@@ -31,12 +34,17 @@
 
                             <td>
                                 <img src="@item.ImageUrl" width="50" />
+                                <form asp-action="SetActiveImage" asp-route-Id="@item.Id" method="post">
+                                    <input type="hidden" name="imageId" value="@item.ImageUrl" />
+                                    <button type="submit">Set as Active</button>
+                                </form>
+
                             </td>
 
                             <td>
                                 <a class="btn btn-warning" asp-area="Management" asp-controller="HomePage" asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
 
-                                <a class="btn btn-danger btn-delete" id="@item.Id">Sil</a>
+                                <a class="btn btn-danger btn-delete" asp-area="Management" asp-controller="HomePage" asp-action="Delete" id="@item.Id">Sil</a>
                             </td>
                         </tr>
                     }

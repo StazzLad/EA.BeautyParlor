@@ -17,7 +17,7 @@ namespace EA.BLL.Concrete
     {
         private readonly IIndexComponentDAL _dal;
 
-   
+
 
         public IndexComponentBLL()
         {
@@ -30,6 +30,21 @@ namespace EA.BLL.Concrete
         public async Task<List<IndexComponent>> GetById()
         {
             return await _dal.GetActiveComponents();
+        }
+        public IActionResult SetActiveImage(Guid id)
+        {
+            var image = _dal.GetById(id);
+            if (image != null)
+            {
+                foreach (var img in _dal.GetActiveComponents().Result)
+                {
+                    img.IsActive = false;
+                    _dal.Update(img);
+                }
+                image.IsActive = true;
+                _dal.Update(image);
+            }
+            return null;
         }
 
         public bool Add(IndexComponent indexComponent)
@@ -50,7 +65,7 @@ namespace EA.BLL.Concrete
             {
                 return false;
             }
-          
+
         }
 
         public bool Delete(Guid id)
@@ -72,7 +87,7 @@ namespace EA.BLL.Concrete
         {
             try
             {
-                 return  _dal.GetById(id);
+                return _dal.GetById(id);
             }
             catch (Exception)
             {
@@ -94,5 +109,21 @@ namespace EA.BLL.Concrete
                 return false;
             }
         }
+
+        public bool IsActive(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+        public IndexComponent? GetbyAsync(Guid id)
+        {
+            try
+            {
+                return _dal.GetById(id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        }
     }
-}

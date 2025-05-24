@@ -4,6 +4,7 @@ using EA.Entity.Entities;
 using KB.MindShift.WebUI.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 
 
@@ -47,7 +48,36 @@ namespace EA.BeautyParlorWebUI.Areas.Management.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> SetActiveImage (Guid Id)
+        {
+            _context.SetActiveImage(Id);
 
-        
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Delete(Guid id)
+        {
+            IndexComponent? model = await _context
+                .IndexComponents
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != 2);
+
+            if (model == null)
+                return Json(new { success = false, message = "Ürün Resmi Bulunamadı" });
+
+            await FileUploader.DeleteAsync(_env, model.ImageUrl);
+            _context.IndexComponents.Remove(model);
+            _context.Entry(model).State = EntityState.Deleted;
+
+            int response = await _context.SaveChangesAsync();
+            if (response >= 1)
+            {
+                return Json(new { success = true, message = "Ürün Resmi Silindi!" });
+            }
+            return Json(new { success = false, message = "Ürün Resmi Silinemedi!" });
+
+        }
+
     }
 }

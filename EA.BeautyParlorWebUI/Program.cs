@@ -26,7 +26,7 @@ namespace EA.BeautyParlorWebUI
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            
             //app.UseAuthorization();
 
             app.MapStaticAssets();

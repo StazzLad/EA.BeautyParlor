@@ -18,6 +18,8 @@ namespace EA.Entity.Entities
         [Required]
         [ValidateNever]
         public string ImageUrl { get; set; }
+        public bool IsActive { get; set; } 
+
         [ValidateNever]
         public virtual ICollection<IndexComponent> IndexComponents { get; set; } = new HashSet<IndexComponent>();
     }
